@@ -85,7 +85,7 @@ curl "http://localhost:8000/products/details?product=slack"
   "primary_category": { "name": "Collaboration", "slug": "collaboration" },
   "rating": { "average": 9, "count": 10288, "tr_score": 9.039 },
   "awards": [{ "title": "Top Rated 2026", "state": "awarded" }],
-  "feature_ratings": [{ "name": "Chat", "score": 9.6, "ratings_count": 638, "category_average": 9 }],
+  "feature_ratings": [{ "name": "Chat", "score": 9.6, "ratings_count": 637, "category_average": 9 }],
   "competitors": [
     { "name": "Microsoft Teams", "slug": "microsoft-teams", "rating": { "average": 8.3, "count": 7834 } },
     { "name": "Discord", "slug": "discord", "rating": { "average": 8.3, "count": 247 } }
