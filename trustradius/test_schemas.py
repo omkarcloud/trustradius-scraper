@@ -163,6 +163,24 @@ def test_reviews_schema_defaults_and_filters():
     assert schemas.ProductReviewsSchema().load({"product": "hubspot-crm", "keyword": " "})["keyword"] is None
 
 
+def test_reviews_industry_is_a_path_segment(monkeypatch):
+    # `?industry=` 308s to /reviews/industry/<slug> and loses `page` and the
+    # other filters, so the industry goes in the path and the rest stay params.
+    from trustradius import api, fetch
+    fixture = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fixtures", "reviews_hubspot_industry.html")
+    calls = []
+
+    def fake_get_page(path, label, params=None, not_found_redirect=None):
+        calls.append((path, params))
+        with open(fixture, encoding="utf-8") as f:
+            return f.read()
+    monkeypatch.setattr(fetch, "_get_page", fake_get_page)
+    api._reviews_page("hubspot-crm", page=2, industry="professional-services", country="USA")
+    api._reviews_page("hubspot-crm", page=2, country="USA")
+    assert calls == [("/products/hubspot-crm/reviews/industry/professional-services", {"page": 2, "reviewerCountry": "USA"}),
+                     ("/products/hubspot-crm/reviews", {"page": 2, "reviewerCountry": "USA"})]
+
+
 @pytest.mark.parametrize("bad", [
     {"sort": "newest"}, {"stars": "6"}, {"company_size": "enterprise"}, {"industry": "banking"},
     {"role": "ceo"}, {"country": "US"}, {"updated_within": "week"}, {"page": "0"}, {"page": "2001"},

@@ -273,9 +273,13 @@ def fetch_product_pricing(slug):
     return _get_page(f"/products/{slug}/pricing", f"product {slug}")
 
 
-def fetch_reviews(slug, params=None):
-    """GET /products/<slug>/reviews with the site's filter / sort / page params."""
-    return _get_page(f"/products/{slug}/reviews", f"product {slug}", params or {})
+def fetch_reviews(slug, params=None, industry=None):
+    """GET /products/<slug>/reviews with the site's filter / sort / page params.
+    An industry filter is a path segment, /reviews/industry/<industry>: the site
+    308s `?industry=` there and drops every other param on the way, so page 2
+    (and the country filter) silently came back as page 1 (2026-11-10)."""
+    path = f"/products/{slug}/reviews" + (f"/industry/{industry}" if industry else "")
+    return _get_page(path, f"product {slug}", params or {})
 
 
 def fetch_review_insights(slug):

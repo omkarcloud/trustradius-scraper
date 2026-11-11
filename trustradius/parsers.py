@@ -997,8 +997,10 @@ def _answer(kind, values, response, features_by_id):
                         "is_not_applicable": bool(item.get("na"))})
         return [o for o in out if o["score"] is not None or o["is_not_applicable"]] or None
     if kind == "multiquestion":
+        # Each Key Insight is "yes", "no" or "none" (the reviewer skipped it) -> True / False / None.
         flags = values[0] if values and isinstance(values[0], dict) else {}
-        return {_KEY_INSIGHTS.get(k, k): (v == "yes" if v in ("yes", "no") else v) for k, v in flags.items()}
+        return {_KEY_INSIGHTS.get(k, k): (v == "yes" if v in ("yes", "no") else None if v == "none" else v)
+                for k, v in flags.items()}
     if kind == "ratings":
         out = []
         for item in values:

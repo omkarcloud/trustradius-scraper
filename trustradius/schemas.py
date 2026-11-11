@@ -130,7 +130,7 @@ class CategoryProductsSchema(BaseSchema):
         "description": "category slug (crm) or a trustradius.com category link"})
     page = PageField(max_page=refs.CATEGORY_MAX_PAGE, metadata={
         "description": "page number, 25 products per page (the site stops at page 40)"})
-    free = Flag(metadata={"description": "true = only products with a free version"})
+    free = Flag(metadata={"description": "true = only products with a free option (a free version or a free trial)"})
     top_rated = Flag(metadata={"description": "true = only products with a current Top Rated award"})
     os = ChoiceField(list(refs.OPERATING_SYSTEMS), metadata={
         "description": "only products that support this desktop OS: windows, mac or linux"})

@@ -274,6 +274,12 @@ def test_parse_review_full():
     assert sections["Using Salesforce Sales Cloud"]["product-usability"]["answer"] == 9
 
 
+def test_key_insights_skipped_answer_is_null():
+    # Live reviews carry "none" for a Key Insight the reviewer skipped.
+    answer = P._answer("multiquestion", [{"valueprice": "none", "features": "yes", "buyagain": "no"}], None, {})
+    assert answer == {"is_worth_the_price": None, "has_the_needed_features": True, "would_buy_again": False}
+
+
 def test_parse_review_sparse_and_not_found():
     review = P.parse_review(fixture("review_salesforce_sparse.html"))
     assert review["slug"] == "salesforce-sales-cloud-2025-10-22-09-42-29"

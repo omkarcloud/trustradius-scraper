@@ -121,7 +121,9 @@ def product_details(product):
 
 # ---- products/reviews ----------------------------------------------------------------
 
-def _reviews_params(page, sort, stars, company_size, industry, role, country, keyword, updated_within):
+def _reviews_params(page, sort, stars, company_size, role, country, keyword, updated_within):
+    """The site's query params. The industry filter is not one of them: it is
+    a path segment (fetch_reviews)."""
     params = {}
     if page and page > 1:
         params["page"] = page
@@ -133,8 +135,6 @@ def _reviews_params(page, sort, stars, company_size, industry, role, country, ke
         params["starRating"] = ",".join(sorted(stars, reverse=True))
     if company_size:
         params["companySizeGroup"] = company_size
-    if industry:
-        params["industry"] = industry
     if role:
         params["reviewerRoles"] = role
     if country:
@@ -148,8 +148,8 @@ def _reviews_params(page, sort, stars, company_size, industry, role, country, ke
 
 def _reviews_page(product, page=1, sort="recent", stars=None, company_size=None, industry=None, role=None,
                   country=None, keyword=None, updated_within=None):
-    page_html = fetch_reviews(product, _reviews_params(page, sort, stars, company_size, industry, role, country,
-                                                       keyword, updated_within))
+    page_html = fetch_reviews(product, _reviews_params(page, sort, stars, company_size, role, country, keyword,
+                                                       updated_within), industry=industry)
     parsed = parsers.parse_reviews_page(page_html)
     if parsed.get("product") is None and not parsed["reviews"]:
         raise TrustradiusNotFound(f"product {product} not found")
