@@ -20,19 +20,11 @@ from marshmallow import ValidationError
 from schema_fields import (BaseSchema, ChoiceField, CommaListField, Flag, LimitField, PageField,
                            QueryField, RefField, StrippedString)
 from trustradius import refs
+from scraper_utils.schema import max_length as _max_length
 
 # 10 reviews per page; the site paginates every review (177 pages for HubSpot
 # CRM) and answers an empty page past the end.
 MAX_REVIEWS_PAGE = 2000
-
-
-def _max_length(n):
-    """validate.Length(max=n) that tolerates the None StrippedString returns
-    for an empty value (marshmallow runs validators on it; len(None) is a 500)."""
-    def check(value):
-        if value is not None and len(value) > n:
-            raise ValidationError(f"Longer than maximum length {n}.")
-    return check
 
 
 class ProductRefField(RefField):

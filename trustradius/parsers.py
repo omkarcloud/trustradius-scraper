@@ -47,6 +47,7 @@ from datetime import datetime
 
 from trustradius import refs
 from trustradius.refs import absolute
+from scraper_utils.dates import iso_day as iso_date
 
 # ---- generic helpers ----------------------------------------------------------
 
@@ -76,18 +77,6 @@ def html_text(markup):
     lines = [_WS_RE.sub(" ", line).strip() for line in text.split("\n")]
     out = "\n".join(line for line in lines if line)
     return out or None
-
-
-def iso_date(value):
-    """'2025-11-05T19:21:30.915Z' / '2025-11-05' -> '2025-11-05'; None otherwise."""
-    if not isinstance(value, str) or len(value) < 10:
-        return None
-    head = value[:10]
-    try:
-        datetime.strptime(head, "%Y-%m-%d")
-    except ValueError:
-        return None
-    return head
 
 
 def iso_datetime(value):

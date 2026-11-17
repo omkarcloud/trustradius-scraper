@@ -52,6 +52,7 @@ import config
 import egress
 from scraper_errors import BadRequest, Blocked, NotFound, UpstreamError
 from trustradius.refs import SITE
+from scraper_utils.pages import page_title
 
 # TLS profiles tried on ONE exit before it is dropped: Cloudflare's verdict
 # differs per (exit, fingerprint) — on 2026-11-07 20 proxy exits gave
@@ -193,10 +194,6 @@ def _retrying(fn, which="page"):
 
 
 # ---- classification ----------------------------------------------------------
-
-def page_title(text):
-    match = _TITLE_RE.search(text or "")
-    return match.group(1).strip() if match else ""
 
 
 def is_challenge(text):
